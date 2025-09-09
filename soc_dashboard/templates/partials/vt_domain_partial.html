@@ -6,36 +6,68 @@
 
 {% if r.result %}
   {% with attr=r.result.attributes %}
-    <table>
-      <!-- <tr><th>Domain</th><td>{{ r.result.id }}</td></tr> -->
-      <tr><th>Registrar</th><td>{{ attr.registrar }}</td></tr>
-      <tr><th>Registration Date</th>
-        <td>{% if r.registration_date %} {{ r.registration_date }} {% else %} N/A {% endif %}</td>
+    <table style="border-collapse: collapse; width: 40%; margin-bottom: 10px;">
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Registrar</th>
+        <td style="border: 1px solid #000;">{{ attr.registrar }}</td>
       </tr>
-      <tr><th>Last Analysis Date</th>
-        <td>{% if r.last_analysis_date %} {{ r.last_analysis_date|date:"Y-m-d H:i" }} UTC {% else %} N/A {% endif %}</td>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Registration Date</th>
+        <td style="border: 1px solid #000;">
+          {% if r.registration_date %} {{ r.registration_date }} {% else %} N/A {% endif %}
+        </td>
       </tr>
-      <tr><th>Reputation</th><td>{{ attr.reputation }}</td></tr>
-      <tr><th>Harmless</th><td>{{ attr.last_analysis_stats.harmless }}</td></tr>
-      <tr><th>Malicious</th><td>{{ attr.last_analysis_stats.malicious }}</td></tr>
-      <tr><th>Suspicious</th><td>{{ attr.last_analysis_stats.suspicious }}</td></tr>
-      <tr><th>Undetected</th><td>{{ attr.last_analysis_stats.undetected }}</td></tr>
-      <tr><th>Vendors Flagged</th><td>{{ r.flagged_vendors }}</td></tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Last Analysis Date</th>
+        <td style="border: 1px solid #000;">
+          {% if r.last_analysis_date %} {{ r.last_analysis_date|date:"Y-m-d H:i" }} UTC {% else %} N/A {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Reputation</th>
+        <td style="border: 1px solid #000;">{{ attr.reputation }}</td>
+      </tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Harmless</th>
+        <td style="border: 1px solid #000;">{{ attr.last_analysis_stats.harmless }}</td>
+      </tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Malicious</th>
+        <td style="border: 1px solid #000;">{{ attr.last_analysis_stats.malicious }}</td>
+      </tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Suspicious</th>
+        <td style="border: 1px solid #000;">{{ attr.last_analysis_stats.suspicious }}</td>
+      </tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Undetected</th>
+        <td style="border: 1px solid #000;">{{ attr.last_analysis_stats.undetected }}</td>
+      </tr>
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Vendors Flagged</th>
+        <td style="border: 1px solid #000;">{{ r.flagged_vendors }}</td>
+      </tr>
     </table>
   {% endwith %}
 {% endif %}
 
 {% if r.crowdsourced_context %}
   <h4>Crowdsourced Context</h4>
-  <table>
-    <tr><th>Title</th><th>Details</th><th>Severity</th><th>Source</th><th>Timestamp</th></tr>
+  <table style="border-collapse: collapse; width: 90%; margin-bottom: 10px;">
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Title</th>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Details</th>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Severity</th>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Source</th>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Timestamp</th>
+    </tr>
     {% for ctx in r.crowdsourced_context %}
     <tr>
-      <td>{{ ctx.title }}</td>
-      <td>{{ ctx.details }}</td>
-      <td>{{ ctx.severity }}</td>
-      <td>{{ ctx.source }}</td>
-      <td>
+      <td style="border: 1px solid #000;">{{ ctx.title }}</td>
+      <td style="border: 1px solid #000;">{{ ctx.details }}</td>
+      <td style="border: 1px solid #000;">{{ ctx.severity }}</td>
+      <td style="border: 1px solid #000;">{{ ctx.source }}</td>
+      <td style="border: 1px solid #000;">
         {% if ctx.timestamp %}
           {{ ctx.timestamp|date:"Y-m-d H:i" }} UTC
         {% else %}

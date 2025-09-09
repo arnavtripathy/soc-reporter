@@ -1,28 +1,37 @@
 <h3>VirusTotal URL Report for {{ r.field.value }}</h3>
 
 {% if r.error %}
-  <p style="color:red;">{{ error }}</p>
+  <p style="color:red;">{{ r.error }}</p>
 {% endif %}
 
 {% if r.info %}
-  <p style="color:#666;">{{ info }}</p>
+  <p style="color:#666;">{{ r.info }}</p>
 {% endif %}
 
 {% if r.field.value %}
-  <table>
-    <tr><th>Status</th><td>{{ r.status|default:"N/A" }}</td></tr>
+  <table style="border-collapse: collapse; width: 40%; margin-bottom: 10px;">
     <tr>
-      <th>Analysis Date</th>
-      <td>{% if r.analysis_date %}{{ r.analysis_date|date:"Y-m-d H:i"}} UTC{% else %}N/A{% endif %}</td>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Status</th>
+      <td style="border: 1px solid #000;">{{ r.status|default:"N/A" }}</td>
     </tr>
     <tr>
-      <th>Detections</th>
-      <td>
-        <span class="badge">Harmless: {{ r.stats.harmless }}</span>
-        <span class="badge">Malicious: {{ r.stats.malicious }}</span>
-        <span class="badge">Suspicious: {{ r.stats.suspicious }}</span>
-        <span class="badge">Undetected: {{ r.stats.undetected }}</span>
-        <span class="badge">Flagged: {{ r.stats.flagged }}</span>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Analysis Date</th>
+      <td style="border: 1px solid #000;">
+        {% if r.analysis_date %}
+          {{ r.analysis_date|date:"Y-m-d H:i"}} UTC
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Detections</th>
+      <td style="border: 1px solid #000;">
+        Harmless: {{ r.stats.harmless }} |
+        Malicious: {{ r.stats.malicious }} |
+        Suspicious: {{ r.stats.suspicious }} |
+        Undetected: {{ r.stats.undetected }} |
+        Flagged: {{ r.stats.flagged }}
       </td>
     </tr>
   </table>
@@ -32,7 +41,7 @@
       {% if r.gui_url %}
         <a href="{{ r.gui_url }}" target="_blank" rel="noopener">View URL on VirusTotal</a>
       {% endif %}
-      {% if analysis_url %}
+      {% if r.analysis_url %}
         &nbsp;|&nbsp;
         <a href="{{ r.analysis_url }}" target="_blank" rel="noopener">View Analysis</a>
       {% endif %}

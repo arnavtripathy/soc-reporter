@@ -1,23 +1,52 @@
-<h3>AbuseIPDB Report for {{ r.field.value }}</h3>
+<h3>AbuseIPDB Report for {{ r.field.value }}</h3> 
+
 {% if r.result %}
-  <table>
-    <tr><th>Abuse Confidence Score</th><td>{{ r.result.abuseConfidenceScore }}</td></tr>
-    <tr><th>Total Reports</th><td>{{ r.result.totalReports }}</td></tr>
-    <tr><th>Last Reported At</th><td>{{ r.result.lastReportedAt }}</td></tr>
-    <tr><th>Country</th><td>{{ r.result.countryCode }}</td></tr>
-    <tr><th>Usage Type</th><td>{{ r.result.usageType }}</td></tr>
-    <tr><th>ISP</th><td>{{ r.result.isp }}</td></tr>
-    <tr><th>Domain</th><td>{{ r.result.domain }}</td></tr>
+  <!-- Narrow summary table -->
+  <table style="border-collapse: collapse; width: 40%; margin-bottom: 10px;">
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Abuse Confidence Score</th>
+      <td style="border: 1px solid #000;">{{ r.result.abuseConfidenceScore }}</td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Total Reports</th>
+      <td style="border: 1px solid #000;">{{ r.result.totalReports }}</td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Last Reported At</th>
+      <td style="border: 1px solid #000;">{{ r.result.lastReportedAt }}</td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Country</th>
+      <td style="border: 1px solid #000;">{{ r.result.countryCode }}</td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Usage Type</th>
+      <td style="border: 1px solid #000;">{{ r.result.usageType }}</td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">ISP</th>
+      <td style="border: 1px solid #000;">{{ r.result.isp }}</td>
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000; background: #f2f2f2;">Domain</th>
+      <td style="border: 1px solid #000;">{{ r.result.domain }}</td>
+    </tr>
   </table>
+
   {% if r.reports %}
     <h4>Recent Reports</h4>
-    <table>
-      <tr><th>Reported At</th><th>Country</th><th>Comment</th></tr>
+    <!-- Slightly wider for 3 columns -->
+    <table style="border-collapse: collapse; width: 70%; margin-bottom: 10px;">
+      <tr>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Reported At</th>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Country</th>
+        <th style="border: 1px solid #000; background: #f2f2f2;">Comment</th>
+      </tr>
       {% for report in r.reports %}
       <tr>
-        <td>{{ report.reportedAt }}</td>
-        <td>{{ report.country }}</td>
-        <td><pre style="white-space:pre-wrap">{{ report.comment }}</pre></td>
+        <td style="border: 1px solid #000;">{{ report.reportedAt }}</td>
+        <td style="border: 1px solid #000;">{{ report.country }}</td>
+        <td style="border: 1px solid #000; white-space: pre-wrap;">{{ report.comment }}</td>
       </tr>
       {% endfor %}
     </table>

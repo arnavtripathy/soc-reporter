@@ -11,8 +11,8 @@
   <h1>Generated Investigation Report</h1>
 
   {% for r in results %}
-    <h2>{{ r.field.name }} ({{ r.field.type }})</h2>
-    <p><strong>Value:</strong> {{ r.field.value }}</p>
+    <h2>{{ r.field.name }}</h2>
+    <p>{{ r.field.value }}</p>
 
     {% if r.error %}
       <p style="color:red;">Error: {{ r.error }}</p>

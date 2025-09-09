@@ -214,7 +214,7 @@ def submit_dynamic_scan(request):
                 fields.append({
                     "name": value.strip(),
                     "type": request.POST.get(f"asset_type_{suffix}", "").lower(),
-                    "value": defang(request.POST.get(f"field_value_{suffix}", "").strip()),
+                    "value": request.POST.get(f"field_value_{suffix}", "").strip(),
                 })
 
         for f in fields:
@@ -226,8 +226,8 @@ def submit_dynamic_scan(request):
                     abuse_data = abuseipdb_check(f["value"], ABUSEIPDB_API_KEY)
                     inner = abuse_data.get("data", {}).get("data", {})  # IP info is inside data.data
                     reports_resp = abuseipdb_reports(f["value"], ABUSEIPDB_API_KEY, per_page=10)
-                    reports = reports_resp.get("results", [])  # if using verbose
-
+                    reports = reports_resp.get("results", []) 
+                    f["value"]= defang(f["value"]) #Defang IP
                     r.update({
                         "template": "partials/abuseipdb_partial.html",
                         "result": inner,
@@ -236,6 +236,7 @@ def submit_dynamic_scan(request):
                     })
 
                 elif f["type"] == "domain":
+                    f["value"]= defang(f["value"])
                     vt_data = vt_domain(f["value"], VIRUSTOTAL_API_KEY)
                     result = vt_data.get("data", {}).get("data", {})
                     attrs = result.get("attributes", {})
@@ -260,6 +261,7 @@ def submit_dynamic_scan(request):
                     })
 
                 elif f["type"] == "url":
+                    f["value"]= defang(f["value"])
                     vt_data = vt_url_scan(f["value"], VIRUSTOTAL_API_KEY)
                     analysis = vt_data.get("data", {})
                     data_node = analysis.get("data", {})
@@ -285,7 +287,7 @@ def submit_dynamic_scan(request):
 
                 else:
                     r["template"] = None
-                    r["error"] = "No scan for text input."
+                    # r["error"] = "No scan for text input."
 
             except Exception as e:
                 r["error"] = str(e)

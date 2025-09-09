@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VirusTotal Domain Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { color: #333; }
+        table { border-collapse: collapse; width: 70%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f4f4f4; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>VirusTotal Domain Report</h2>
+
+    <!-- Input form -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="domain" placeholder="Enter domain (e.g. example.com)">
+        <button type="submit">Check</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if result %}
+        {% with attr=result.attributes %}
+            <h3>Results for {{ result.id }}</h3>
+            <table>
+                <tr><th>Domain</th><td>{{ result.id }}</td></tr>
+                <tr><th>Registrar</th><td>{{ attr.registrar }}</td></tr>
+                <tr><th>Registration Date</th>
+                    <td>{% if registration_date %} {{ registration_date }} {% else %} N/A {% endif %}</td>
+                </tr>
+                <tr><th>Last Analysis Date</th>
+                    <td>{% if last_analysis_date %} {{ last_analysis_date|date:"Y-m-d H:i" }} UTC {% else %} N/A {% endif %}</td>
+                </tr>
+                <tr><th>Reputation</th><td>{{ attr.reputation }}</td></tr>
+                <tr><th>Harmless</th><td>{{ attr.last_analysis_stats.harmless }}</td></tr>
+                <tr><th>Malicious</th><td>{{ attr.last_analysis_stats.malicious }}</td></tr>
+                <tr><th>Suspicious</th><td>{{ attr.last_analysis_stats.suspicious }}</td></tr>
+                <tr><th>Undetected</th><td>{{ attr.last_analysis_stats.undetected }}</td></tr>
+                <tr><th>Vendors Flagged</th><td>{{ flagged_vendors }}</td></tr>
+            </table>
+        {% endwith %}
+    {% endif %}
+    {% if crowdsourced_context %}
+    <h3>Crowdsourced Context</h3>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Details</th>
+            <th>Severity</th>
+            <th>Source</th>
+            <th>Timestamp</th>
+        </tr>
+        {% for ctx in crowdsourced_context %}
+            <tr>
+                <td>{{ ctx.title }}</td>
+                <td>{{ ctx.details }}</td>
+                <td>{{ ctx.severity }}</td>
+                <td>{{ ctx.source }}</td>
+                <td>
+                    {% if ctx.timestamp %}
+                        {{ ctx.timestamp|date:"Y-m-d H:i" }} UTC
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% if whois %}
+    <h3>WHOIS Data</h3>
+    <pre style="background:#f4f4f4; padding:10px; border:1px solid #ccc; white-space:pre-wrap;">
+{{ whois }}
+    </pre>
+{% endif %}
+</body>
+</html>

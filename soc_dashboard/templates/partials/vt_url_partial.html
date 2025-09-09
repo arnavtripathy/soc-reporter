@@ -1,0 +1,41 @@
+<h3>VirusTotal URL Report for {{ r.field.value }}</h3>
+
+{% if r.error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+{% if r.info %}
+  <p style="color:#666;">{{ info }}</p>
+{% endif %}
+
+{% if r.field.value %}
+  <table>
+    <tr><th>Status</th><td>{{ r.status|default:"N/A" }}</td></tr>
+    <tr>
+      <th>Analysis Date</th>
+      <td>{% if r.analysis_date %}{{ r.analysis_date|date:"Y-m-d H:i"}} UTC{% else %}N/A{% endif %}</td>
+    </tr>
+    <tr>
+      <th>Detections</th>
+      <td>
+        <span class="badge">Harmless: {{ r.stats.harmless }}</span>
+        <span class="badge">Malicious: {{ r.stats.malicious }}</span>
+        <span class="badge">Suspicious: {{ r.stats.suspicious }}</span>
+        <span class="badge">Undetected: {{ r.stats.undetected }}</span>
+        <span class="badge">Flagged: {{ r.stats.flagged }}</span>
+      </td>
+    </tr>
+  </table>
+
+  {% if r.gui_url or r.analysis_url %}
+    <p>
+      {% if r.gui_url %}
+        <a href="{{ r.gui_url }}" target="_blank" rel="noopener">View URL on VirusTotal</a>
+      {% endif %}
+      {% if analysis_url %}
+        &nbsp;|&nbsp;
+        <a href="{{ r.analysis_url }}" target="_blank" rel="noopener">View Analysis</a>
+      {% endif %}
+    </p>
+  {% endif %}
+{% endif %}

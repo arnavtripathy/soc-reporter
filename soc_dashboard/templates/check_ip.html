@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AbuseIPDB IP Check</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 60%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f4f4f4; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Check IP Address</h2>
+
+    <!-- Form to input IP -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="ip" placeholder="Enter IP address">
+        <button type="submit">Check</button>
+    </form>
+
+    <!-- Error message -->
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <!-- Results table -->
+    {% if result %}
+        <h3>Results for {{ result.ipAddress }}</h3>
+        <table>
+            <tr><th>Abuse Confidence Score</th><td>{{ result.abuseConfidenceScore }}</td></tr>
+            <tr><th>Total Reports</th><td>{{ result.totalReports }}</td></tr>
+            <tr><th>Last Reported At</th><td>{{ result.lastReportedAt }}</td></tr>
+            <tr><th>Country</th><td>{{ result.countryCode }}</td></tr>
+            <tr><th>Usage Type</th><td>{{ result.usageType }}</td></tr>
+            <tr><th>ISP</th><td>{{ result.isp }}</td></tr>
+            <tr><th>Domain</th><td>{{ result.domain }}</td></tr>
+            {% if reports and reports|length > 0 %}
+            <table>
+                <tr>
+                    <th>Reported At</th>
+                    <th>Country</th>
+                    <th>Comment</th>
+                </tr>
+                {% for r in reports %}
+                <tr>
+                    <td>{{ r.reportedAt }}</td>
+                    <td>{{ r.country|default:"N/A" }}</td>
+                    <td>
+                        <pre style="white-space:pre-wrap; margin:0;">{{ r.comment|default:"—" }}</pre>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        
+        {% if gui_url %}
+            <p><a href="{{ gui_url }}" target="_blank" rel="noopener">View full details on AbuseIPDB</a></p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

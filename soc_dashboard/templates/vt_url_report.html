@@ -1,0 +1,66 @@
+<!-- soc_dashboard/templates/soc_dashboard/vt_url_report.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VirusTotal URL Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 70%; margin-top: 16px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    .error { color: #b00020; font-weight: bold; }
+    .note { color: #666; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:10px; background:#eee; margin-right:6px; }
+  </style>
+</head>
+<body>
+  <h2>VirusTotal URL Analysis</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="text" name="url" placeholder="Enter full URL (e.g. https://example.com/login)" style="width:60%">
+    <button type="submit">Analyze</button>
+  </form>
+
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% endif %}
+
+  {% if info %}
+    <p class="note">{{ info }}</p>
+  {% endif %}
+
+  {% if input_url %}
+    <h3>Results for {{ input_url }}</h3>
+    <table>
+      <tr><th>Status</th><td>{{ status|default:"N/A" }}</td></tr>
+      <tr>
+        <th>Analysis Date</th>
+        <td>{% if analysis_date %}{{ analysis_date|date:"Y-m-d H:i" }} UTC{% else %}N/A{% endif %}</td>
+      </tr>
+      <tr>
+        <th>Detections</th>
+        <td>
+          <span class="badge">Harmless: {{ stats.harmless }}</span>
+          <span class="badge">Malicious: {{ stats.malicious }}</span>
+          <span class="badge">Suspicious: {{ stats.suspicious }}</span>
+          <span class="badge">Undetected: {{ stats.undetected }}</span>
+          <span class="badge">Flagged: {{ stats.flagged }}</span>
+        </td>
+      </tr>
+    </table>
+
+    {% if gui_url or analysis_url %}
+      <p>
+        {% if gui_url %}
+          <a href="{{ gui_url }}" target="_blank" rel="noopener">View URL on VirusTotal</a>
+        {% endif %}
+        {% if analysis_url %}
+          &nbsp;|&nbsp;
+          <a href="{{ analysis_url }}" target="_blank" rel="noopener">View Analysis</a>
+        {% endif %}
+      </p>
+    {% endif %}
+  {% endif %}
+</body>
+</html>

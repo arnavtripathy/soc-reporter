@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generated Investigation Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { margin-top: 40px; border-bottom: 2px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Generated Investigation Report</h1>
+
+  {% for r in results %}
+    <h2>{{ r.field.name }} ({{ r.field.type }})</h2>
+    <p><strong>Value:</strong> {{ r.field.value }}</p>
+
+    {% if r.error %}
+      <p style="color:red;">Error: {{ r.error }}</p>
+    {% elif r.template %}
+      {% include r.template %}
+    {% endif %}
+  {% endfor %}
+</body>
+</html>

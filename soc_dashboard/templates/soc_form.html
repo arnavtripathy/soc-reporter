@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic SOC Scan Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { color: #333; }
+        .field-row {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+        label { display: block; margin-top: 6px; font-size: 14px; }
+        input, select {
+            width: 100%;
+            padding: 6px;
+            margin-top: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 14px;
+            border: none;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover { background: #0056b3; }
+        .remove-btn {
+            background: #dc3545;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Custom SOC Scan Form</h2>
+
+    <form method="POST" action="{% url 'submit_dynamic_scan' %}">
+        {% csrf_token %}
+        <div id="fields-container">
+            <!-- Fields will be added dynamically -->
+        </div>
+
+        <button type="button" onclick="addField()">+ Add Field</button>
+        <br><br>
+        <button type="submit">Generate Report</button>
+    </form>
+
+    <script>
+        let fieldCount = 0;
+
+        function addField() {
+            fieldCount++;
+            const container = document.getElementById("fields-container");
+
+            const div = document.createElement("div");
+            div.className = "field-row";
+            div.setAttribute("id", "field-" + fieldCount);
+
+            div.innerHTML = `
+                <label>Field Name</label>
+                <input type="text" name="field_name_${fieldCount}" placeholder="e.g. Suspicious IP">
+                
+                <label>Asset Type</label>
+                <select name="asset_type_${fieldCount}">
+                    <option value="text">Text</option>
+                    <option value="ip">IP</option>
+                    <option value="domain">Domain</option>
+                    <option value="url">URL</option>
+                </select>
+
+                <label>Value</label>
+                <input type="text" name="field_value_${fieldCount}" placeholder="Enter value">
+
+                <button type="button" class="remove-btn" onclick="removeField(${fieldCount})">Remove</button>
+            `;
+
+            container.appendChild(div);
+        }
+
+        function removeField(id) {
+            const fieldDiv = document.getElementById("field-" + id);
+            if (fieldDiv) fieldDiv.remove();
+        }
+    </script>
+</body>
+</html>

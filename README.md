@@ -59,9 +59,15 @@ python manage.py runserver
 Open http://127.0.0.1:8000/soc/dynamic-form/ in your browser.
 Enter indicators (IP, domain, or URL) and generate the consolidated report. You can add whatever fields you want. Once written you can copy paste into your SOC reports.
 
+## Demo Usage (Promise it's gonna look much better later)
+
+![SOC Reporter Demo](soc_report.gif)
+
 ## 🛠️ Roadmap
 
 - Add hash (MD5/SHA256) scanning via VirusTotal
 - Export reports as PDF/Docx directly
 - Analyst authentication and case management
+
+
 

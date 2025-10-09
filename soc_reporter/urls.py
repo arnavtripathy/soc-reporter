@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("soc/", include("soc_dashboard.urls")),  # all SOC dashboard routes
+    path("socv2/", include("soc_dashboard_v2.urls")),  # all SOC dashboard routes
 ]

@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <title>VirusTotal Hash Lookup</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Optional: Bootstrap CDN for quick nicer UI -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { padding: 20px; background:#f8f9fa; }
@@ -16,7 +15,7 @@
 </head>
 <body>
   <div class="container">
-    <h2 class="mb-3">VirusTotal hash lookup</h2>
+    <h2 class="mb-3">VirusTotal Hash Lookup</h2>
 
     <div class="vt-card mb-4">
       <form method="post" novalidate>
@@ -37,7 +36,7 @@
 
       {% if asset %}
         <div class="mt-3">
-          <p class="mb-1"><span class="small-key">Asset:</span> <span class="muted">{{ asset }}</span></p>
+          <p class="mb-1"><span class="small-key">Hash:</span> <span class="muted">{{ asset }}</span></p>
           {% if gui_url %}
             <p class="mb-0"><a href="{{ gui_url }}" target="_blank" rel="noopener noreferrer">Open in VirusTotal GUI</a></p>
           {% endif %}
@@ -48,13 +47,46 @@
     {% if results %}
       <div class="vt-card">
         <h5>Summary</h5>
-        <!-- Try to show common keys in a table if present -->
-        <table class="table table-sm">
+        <table class="table table-sm table-bordered">
           <tbody>
-            {% if results.reputation %}
+            {% if results.meaningful_name %}
+              <tr><th>Filename</th><td>{{ results.meaningful_name }}</td></tr>
+            {% endif %}
+            {% if results.type_description %}
+              <tr><th>File Type</th><td>{{ results.type_description }}</td></tr>
+            {% endif %}
+            {% if results.magic %}
+              <tr><th>Magic String</th><td>{{ results.magic }}</td></tr>
+            {% endif %}
+            {% if results.size %}
+              <tr><th>File Size</th><td>{{ results.size }} bytes</td></tr>
+            {% endif %}
+            {% if results.reputation is not None %}
               <tr><th>Reputation</th><td>{{ results.reputation }}</td></tr>
             {% endif %}
-            {% if results.md5 or results.sha256 %}
+            {% if results.times_submitted %}
+              <tr><th>Times Submitted</th><td>{{ results.times_submitted }}</td></tr>
+            {% endif %}
+            {% if results.first_submission_date %}
+              <tr><th>First Submission</th><td>{{ results.first_submission_date }}</td></tr>
+            {% endif %}
+            {% if results.last_submission_date %}
+              <tr><th>Last Submission</th><td>{{ results.last_submission_date }}</td></tr>
+            {% endif %}
+            {% if results.last_analysis_date %}
+              <tr><th>Last Analysis Date</th><td>{{ results.last_analysis_date }}</td></tr>
+            {% endif %}
+            {% if results.last_analysis_stats %}
+              <tr>
+                <th>Detections Summary</th>
+                <td>
+                  {% for k, v in results.last_analysis_stats.items %}
+                    <span class="badge rounded-pill bg-secondary me-1">{{ k }}: {{ v }}</span>
+                  {% endfor %}
+                </td>
+              </tr>
+            {% endif %}
+            {% if results.md5 or results.sha1 or results.sha256 %}
               <tr>
                 <th>Hashes</th>
                 <td>
@@ -64,33 +96,18 @@
                 </td>
               </tr>
             {% endif %}
-            {% if results.last_analysis_stats %}
-              <tr>
-                <th>Detections (summary)</th>
-                <td>
-                  {% for k, v in results.last_analysis_stats.items %}
-                    <span class="badge rounded-pill bg-secondary me-1">{{ k }}: {{ v }}</span>
-                  {% endfor %}
-                </td>
-              </tr>
-            {% endif %}
-            {% if results.last_analysis_date %}
-              <tr><th>Last analysis</th><td>{{ results.last_analysis_date }}</td></tr>
-            {% endif %}
           </tbody>
         </table>
 
-        <h6 class="mt-3">Raw / full parsed JSON</h6>
+        <h6 class="mt-3">Raw / Full Parsed JSON</h6>
         <pre class="json">{{ results_json }}</pre>
       </div>
     {% elif results_json %}
-      <!-- if results exists but parsed differently -->
       <div class="vt-card">
-        <h5>Parsed results</h5>
+        <h5>Parsed Results</h5>
         <pre class="json">{{ results_json }}</pre>
       </div>
     {% endif %}
-
   </div>
 </body>
 </html>

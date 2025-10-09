@@ -1,4 +1,6 @@
 import requests
+from soc_dashboard_v2.helpers import to_utc
+
 
 def vt_hash(file_hash, vt_key):
     """
@@ -30,9 +32,9 @@ def vt_hash_parse(vt_hash_json):
     results = {
         "reputation": attributes.get("reputation"),
         "last_analysis_stats": attributes.get("last_analysis_stats", {}),
-        "last_analysis_date": attributes.get("last_analysis_date"),
-        "first_submission_date": attributes.get("first_submission_date"),
-        "last_submission_date": attributes.get("last_submission_date"),
+        "last_analysis_date": to_utc(attributes.get("last_analysis_date")),
+        "first_submission_date": to_utc(attributes.get("first_submission_date")),
+        "last_submission_date": to_utc(attributes.get("last_submission_date")),
         "times_submitted": attributes.get("times_submitted"),
         "magic": attributes.get("magic"),  # file magic string
         "meaningful_name": attributes.get("meaningful_name"),  # filename if available
